@@ -10,6 +10,9 @@ class Todo extends Database {
     }
     public function insertTask($category_id, $task) {
         $sql = "INSERT INTO todo_items (category_id, task) VALUES (:category_id, :task)";
+        if(empty($category_id)){
+            $category_id = NULL;
+        }
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':category_id', $category_id);
         $stmt->bindParam(':task', $task);
@@ -33,6 +36,7 @@ class Todo extends Database {
 
         $stmt = $this->conn->query($sql);
         $tasksByCategory = array();
+        $uncategorizedTasks = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $category = $row['category'];
@@ -40,10 +44,14 @@ class Todo extends Database {
             if (!isset($tasksByCategory[$category])) {
                 $tasksByCategory[$category] = array();
             }
-
-            $tasksByCategory[$category][] = $row;
+            if($category == null){
+                $uncategorizedTasks[] = $row;
+            }else{
+                $tasksByCategory[$category][] = $row;
+            }
         }
-
+        // Append uncategorized tasks to the end of the array
+        $tasksByCategory["No Category"] = $uncategorizedTasks;
         return $tasksByCategory;
     }
     public function deleteTask($id) {
@@ -59,6 +67,8 @@ class Todo extends Database {
         $stmt->bindParam(':editedTask', $editedTask);
         return $stmt->execute();
     }
+
+
 
 }
 ?>
