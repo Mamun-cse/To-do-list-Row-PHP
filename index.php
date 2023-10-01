@@ -19,7 +19,7 @@ if (isset($_POST['new_category'])) {
 
 // Get tasks grouped by category
 $tasksByCategory = $todo->getTasksByCategory();
- // Add new task
+// Add new task
 if (isset($_POST['task']) && isset($_POST['category'])) {
     $categoryId = $_POST['category'];
     $task = $_POST['task'];
@@ -44,9 +44,7 @@ if (isset($_POST['edited_task']) && isset($_GET['edit'])) {
     exit;
 }
 
-$tasks = $todo->getTasks();
-
-
+//$tasks = $todo->getTasks();
 ?>
 
 <!DOCTYPE html>
@@ -56,10 +54,20 @@ $tasks = $todo->getTasks();
     <title>To-Do List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <style>
         .completed {
             text-decoration: line-through;
+        }
+
+        }
+        .draggable {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ddd;
+            background-color: #fff;
         }
     </style>
 </head>
@@ -81,14 +89,13 @@ $tasks = $todo->getTasks();
                     </form>
                     <form method="post">
                         <div class="input-group mb-3">
-                            <select name="category" class="form-control">
+                            <select id="task-category" name="category" class="form-control">
                                 <option value="">Select Category</option>
                                 <?php foreach ($categories as $category): ?>
                                     <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
                                 <?php endforeach; ?>
-                                <option value="">No Category</option>
                             </select>
-                            <input type="text" name="task" class="form-control" placeholder="Add a new task" required>
+                            <input type="text" id="new-task" name="task" class="form-control" placeholder="Add a new task" required>
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-success">Add</button>
                             </div>
@@ -97,10 +104,9 @@ $tasks = $todo->getTasks();
 
                     <!-- Display tasks grouped by category -->
                     <?php foreach ($tasksByCategory as $category => $categoryTasks): ?>
-                        <h2><?php echo $category; ?></h2>
+                        <h2 class="droppable" data-category_id="<?php echo $categoryTasks[0]['category_id']; ?>"><?php echo $category; ?></h2>
                         <ul class="list-group">
                             <?php foreach ($categoryTasks as $task): ?>
-
                                 <li class="list-group-item d-flex justify-content-between align-items-center <?php echo ($task['completed'] ? 'completed' : ''); ?>">
                                     <div>
                                         <?php if (isset($_GET['edit']) && $_GET['edit'] == $task['id']): ?>
@@ -113,10 +119,10 @@ $tasks = $todo->getTasks();
                                                 </div>
                                             </form>
                                         <?php else: ?>
-                                            <input type="checkbox" class="task-checkbox" data-task-id="<?php echo $task['id']; ?>" <?php echo ($task['completed'] ? 'checked' : ''); ?>>
-                                            <label class="task-label <?php echo ($task['completed'] ? 'completed' : ''); ?>">
-                                                <?php echo $task['task']; ?>
-                                            </label>
+                                            <div class="d-flex align-items-center">
+                                                <input type="checkbox" class="task-checkbox" data-task-id="<?php echo $task['id']; ?>" <?php echo ($task['completed'] ? 'checked' : ''); ?>>
+                                                <div class="draggable" data-task-id="<?php echo $task['id']; ?>"><?php echo $task['task']; ?></div>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                     <div>
@@ -129,49 +135,12 @@ $tasks = $todo->getTasks();
                             <?php endforeach; ?>
                         </ul>
                     <?php endforeach; ?>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var checkboxes = document.querySelectorAll('.task-checkbox');
-
-        checkboxes.forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                var taskId = this.getAttribute('data-task-id');
-                var completed = this.checked ? 1 : 0;
-
-                // Send a request to the server to update the task status
-                fetch('update_task_status.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'task_id=' + taskId + '&completed=' + completed,
-                })
-                    .then(function(response) {
-                        if (response.ok) {
-                            return response.text();
-                        } else {
-                            throw new Error('Network response was not ok');
-                        }
-                    })
-                    .then(function(data) {
-                        // Handle the response from the server (if needed)
-                        console.log(data);
-                    })
-                    .catch(function(error) {
-                        console.error('Fetch error:', error);
-                    });
-            });
-        });
-    });
-</script>
-
-
-
+<script src ="script.js"></script>
 </body>
 </html>
-

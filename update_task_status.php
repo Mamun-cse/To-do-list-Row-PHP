@@ -13,11 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':completed', $completed, PDO::PARAM_INT);
     $stmt->bindParam(':task_id', $taskId, PDO::PARAM_INT);
 
-    if ($stmt->execute()) {
-        echo 'Task status updated successfully.';
-    } else {
-        echo 'Failed to update task status.';
-    }
+    return $stmt->execute();
     header('Location: index.php');
     exit;
     }

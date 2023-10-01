@@ -68,6 +68,29 @@ class Todo extends Database {
         return $stmt->execute();
     }
 
+    // Inside your Todo class
+    public function updateTaskCategory($taskId, $category) {
+        try {
+            // Connect to your database (replace with your database credentials)
+            $pdo = new PDO("mysql:host=localhost;dbname=todolist", "root", "");
+
+            // Prepare the SQL query
+            $stmt = $pdo->prepare("UPDATE todo_items SET category_id = :category WHERE id = :taskId");
+
+            // Bind parameters
+            $stmt->bindParam(':category', $category, PDO::PARAM_INT);
+            $stmt->bindParam(':taskId', $taskId, PDO::PARAM_INT);
+
+            // Execute the query
+             return $stmt->execute();
+
+
+        } catch (PDOException $e) {
+            // Handle any database errors here (e.g., log or display an error message)
+            error_log("Database Error: " . $e->getMessage());
+            return false;
+        }
+    }
 
 
 }
