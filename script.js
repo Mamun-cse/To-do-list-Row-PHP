@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(function(data) {
                     // Handle the response from the server (if needed)
                     console.log(data);
+                    location.reload();
                 })
                 .catch(function(error) {
                     console.error('Fetch error:', error);
@@ -44,12 +45,14 @@ $(document).ready(function() {
         receive: function(event, ui) {
             var taskId = ui.item.find(".draggable").data("task-id");
             var categoryId = $(this).prev("h2.droppable").data("category_id");
+            console.log(taskId);
+            console.log(categoryId);
 
-            // Send a request to update the task's category
-            $.post("update_task_category.php", { taskId: taskId, categoryId: categoryId }, function(data) {
-
+            $.post("update_task_category.php", { taskId: taskId, categoryId: categoryId },function(data,status){
+                console.log('tested');
+                console.log(data);
                 if (data) {
-                    // Reload the page or update the UI as needed
+                    alert("Success to update task category.");
                     location.reload();
                 } else {
                     alert("Failed to update task category.");

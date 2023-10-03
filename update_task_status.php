@@ -1,20 +1,16 @@
 <?php
-// Include your database connection code here
-require_once 'Database.php';
+require_once 'Todo.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $taskId = $_POST['task_id'];
     $completed = $_POST['completed'];
 
-    // Update the task status in the database
-    $database = new Database(); // Initialize your database connection
-    $sql = "UPDATE todo_items SET completed = :completed WHERE id = :task_id";
-    $stmt = $database->conn->prepare($sql);
-    $stmt->bindParam(':completed', $completed, PDO::PARAM_INT);
-    $stmt->bindParam(':task_id', $taskId, PDO::PARAM_INT);
+    //$database = new Database();
+    $todo = new Todo();
+    $result = $todo->updateTaskStatus($taskId, $completed);
+    echo $result;
 
-    return $stmt->execute();
-    header('Location: index.php');
-    exit;
+    //header('Location: index.php');
+    //exit;
     }
 ?>
