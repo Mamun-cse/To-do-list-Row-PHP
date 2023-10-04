@@ -2,6 +2,7 @@
 require_once 'Database.php';
 class Task extends Database
 {
+    // Add task parts
     public function insertTask($category_id, $task) {
         $sql = "INSERT INTO todo_items (category_id, task) VALUES (:category_id, :task)";
         if(empty($category_id)){
@@ -13,6 +14,7 @@ class Task extends Database
         return $statement->execute();
     }
 
+    // Get taskByCategory wise
     public function getTasksByCategory() {
         $sql = "SELECT categories.name AS category, todo_items.* FROM todo_items
                 LEFT JOIN categories ON todo_items.category_id = categories.id
@@ -39,12 +41,15 @@ class Task extends Database
         return $tasksByCategory;
     }
 
+    // Delete task parts
     public function deleteTask($id) {
         $sql = "DELETE FROM todo_items WHERE id = :id";
         $statement = $this->conn->prepare($sql);
         $statement->bindParam(':id', $id);
         return $statement->execute();
     }
+
+    // Edit task parts
     public function editTask($id, $editedTask) {
         $sql = "UPDATE todo_items SET task = :editedTask WHERE id = :id";
         $statement = $this->conn->prepare($sql);
@@ -53,10 +58,5 @@ class Task extends Database
         return $statement->execute();
     }
 
-    /*public function getTasks() {
-       $sql = "SELECT t.id, t.task, c.name as category, t.created_at FROM todo_items t LEFT JOIN categories c ON t.category_id = c.id ORDER BY t.created_at ASC";
-       $stmt = $this->conn->query($sql);
-       return $stmt->fetchAll(PDO::FETCH_ASSOC);
-   }*/
 }
 ?>

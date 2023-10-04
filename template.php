@@ -32,7 +32,7 @@
                     <!-- Category form -->
                     <form method="post">
                         <div class="input-group mb-3">
-                            <input type="text" name="new_category" class="form-control" placeholder="New Category">
+                            <input type="text" name="newCategory" class="form-control" placeholder="New Category">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-primary">Add</button>
                             </div>
@@ -64,7 +64,7 @@
                                         <?php if (isset($_GET['edit']) && $_GET['edit'] == $task['id']): ?>
                                             <form method="post" action="?edit=<?php echo $task['id']; ?>">
                                                 <div class="input-group">
-                                                    <input type="text" name="edited_task" class="form-control" value="<?php echo $task['task']; ?>" required>
+                                                    <input type="text" name="editedTask" class="form-control" value="<?php echo $task['task']; ?>" required>
                                                     <div class="input-group-append">
                                                         <button type="submit" class="btn btn-primary btn-sm">Save</button>
                                                     </div>

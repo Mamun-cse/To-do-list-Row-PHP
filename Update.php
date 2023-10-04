@@ -1,7 +1,7 @@
 <?php
 require_once 'Database.php';
 
-class Todo extends Database {
+class Update extends Database {
 
     public function updateTaskStatus($taskId, $completed){
 
@@ -13,6 +13,7 @@ class Todo extends Database {
 
         return $statement->execute();
     }
+
     public function updateTaskCategory($taskId, $categoryId){
 
 

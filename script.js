@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var completed = this.checked ? 1 : 0;
 
             // Send a request to the server to update the task status
-            fetch('update_task_status.php', {
+            fetch('index.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -48,8 +48,9 @@ $(document).ready(function() {
             console.log(taskId);
             console.log(categoryId);
 
-            $.post("update_task_category.php", { taskId: taskId, categoryId: categoryId },function(data,status){
+            $.post("index.php", { taskId: taskId, categoryId: categoryId },function(data,status){
                 console.log('tested');
+                console.log(status);
                 console.log(data);
                 if (data) {
                     alert("Success to update task category.");
