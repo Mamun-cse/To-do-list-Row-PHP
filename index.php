@@ -1,6 +1,5 @@
 <?php
-require_once  'Task.php';
-require_once 'Category.php';
+
 require_once 'TodoList.php';
 
 $todoList = new TodoList();

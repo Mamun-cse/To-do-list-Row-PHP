@@ -77,6 +77,19 @@ class TodoList
 
     // Update checkbox and drag and drop
 
+    // Update check box is it completed or not
+    public function handelUpdateTaskStatus(){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $taskId = $_POST['task_id'];
+            $completed = $_POST['completed'];
+
+            return $this->update->updateTaskStatus($taskId, $completed);
+
+        }else{
+            return false;
+        }
+    }
+
     //Update Category when drag and drop
     public function handelUpdateTaskCategory(){
         if (isset($_POST['taskId']) && isset($_POST['categoryId'])) {
@@ -90,17 +103,5 @@ class TodoList
         }
     }
 
-    // Update check box is it completed or not
-    public function handelUpdateTaskStatus(){
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $taskId = $_POST['task_id'];
-            $completed = $_POST['completed'];
-
-            return $this->update->updateTaskStatus($taskId, $completed);
-
-        }else{
-            return false;
-        }
-    }
 
 }

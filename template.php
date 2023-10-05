@@ -56,12 +56,15 @@
 
                     <!-- Display tasks grouped by category -->
                     <?php foreach ($tasksByCategory as $category => $categoryTasks): ?>
+
                         <h2 class="droppable" data-category_id="<?php echo $categoryTasks[0]['category_id']; ?>"><?php echo $category; ?></h2>
                         <ul class="list-group">
                             <?php foreach ($categoryTasks as $task): ?>
                                 <li class="list-group-item d-flex justify-content-between align-items-center <?php echo ($task['completed'] ? 'completed' : ''); ?>">
+
                                     <div>
                                         <?php if (isset($_GET['edit']) && $_GET['edit'] == $task['id']): ?>
+
                                             <form method="post" action="?edit=<?php echo $task['id']; ?>">
                                                 <div class="input-group">
                                                     <input type="text" name="editedTask" class="form-control" value="<?php echo $task['task']; ?>" required>
@@ -70,19 +73,23 @@
                                                     </div>
                                                 </div>
                                             </form>
+
                                         <?php else: ?>
                                             <div class="d-flex align-items-center">
                                                 <input type="checkbox" class="task-checkbox" data-task-id="<?php echo $task['id']; ?>" <?php echo ($task['completed'] ? 'checked' : ''); ?>>
                                                 <div class="draggable" data-task-id="<?php echo $task['id']; ?>"><?php echo $task['task']; ?></div>
                                             </div>
                                         <?php endif; ?>
+
                                     </div>
+
                                     <div>
                                         <?php if (!isset($_GET['edit']) || $_GET['edit'] != $task['id']): ?>
                                             <a href="?edit=<?php echo $task['id']; ?>" class="btn btn-warning btn-sm ml-2"><i class="fas fa-pencil-alt"></i></a>
                                         <?php endif; ?>
                                         <a href="?delete=<?php echo $task['id']; ?>" class="btn btn-danger btn-sm ml-2"><i class="fas fa-trash-alt"></i></a>
                                     </div>
+
                                 </li>
                             <?php endforeach; ?>
                         </ul>
