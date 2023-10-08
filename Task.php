@@ -4,14 +4,23 @@ class Task extends Database
 {
     // Add task parts
     public function insertTask($category_id, $task) {
-        $sql = "INSERT INTO todo_items (category_id, task) VALUES (:category_id, :task)";
+        /*$sql = "INSERT INTO todo_items (category_id, task) VALUES (:category_id, :task)";
         if(empty($category_id)){
             $category_id = NULL;
         }
         $statement = $this->conn->prepare($sql);
         $statement->bindParam(':category_id', $category_id);
         $statement->bindParam(':task', $task);
-        return $statement->execute();
+        return $statement->execute();*/
+        if(empty($category_id)){
+            $category_id = NULL;
+        }
+        $data = [
+            'category_id' => $category_id,
+            'task' => $task,
+        ];
+
+        return $this->executeInsert('todo_items', $data);
     }
 
     // Get taskByCategory wise
@@ -43,19 +52,32 @@ class Task extends Database
 
     // Delete task parts
     public function deleteTask($id) {
-        $sql = "DELETE FROM todo_items WHERE id = :id";
+        /*$sql = "DELETE FROM todo_items WHERE id = :id";
         $statement = $this->conn->prepare($sql);
         $statement->bindParam(':id', $id);
-        return $statement->execute();
+        return $statement->execute();*/
+        $where = [
+            'id' => $id,
+        ];
+        return $this->executeDelete('todo_items', $where);
     }
 
     // Edit task parts
     public function editTask($id, $editedTask) {
-        $sql = "UPDATE todo_items SET task = :editedTask WHERE id = :id";
+        /*$sql = "UPDATE todo_items SET task = :editedTask WHERE id = :id";
         $statement = $this->conn->prepare($sql);
         $statement->bindParam(':id', $id);
         $statement->bindParam(':editedTask', $editedTask);
-        return $statement->execute();
+        return $statement->execute();*/
+        $data =[
+          'task' => $editedTask
+        ];
+        $where = [
+            'id' => $id
+        ];
+
+        return $this->executeUpdate('todo_items', $data, $where);
+
     }
 
 }

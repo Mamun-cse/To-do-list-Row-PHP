@@ -9,8 +9,6 @@ class Category extends Database
         ];
         return $this->executeInsert('categories', $data);
 
-
-
     }
 
     public function getCategories() {

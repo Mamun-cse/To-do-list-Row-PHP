@@ -21,8 +21,40 @@ class Database{
         $values = ':' . implode(', :', array_keys($data));
 
         $sql = "INSERT INTO $table ($columns) VALUES ($values)";
+
         $statement = $this->conn->prepare($sql);
         return $statement->execute($data);
+    }
+
+    public function executeDelete($table, $where){
+        $conditions = [];
+        foreach ($where as $key => $value){
+            $conditions[] = "$key = :$key";
+        }
+        $whereClause = implode('AND',$conditions);
+        $sql = "DELETE FROM $table WHERE $whereClause";
+        $statement = $this->conn->prepare($sql);
+        return $statement->execute($where);
+        //return $statement->rowCount();
+    }
+
+    public function executeUpdate($table, $data, $where){
+        $columns = [];
+        foreach ($data as $key => $value){
+            $columns[] = "$key = :$key";
+        }
+        $setColumns = implode(',', $columns);
+
+        $conditions = [];
+        foreach ($where as $key => $value){
+            $conditions[] = "$key = :$key";
+        }
+        $whereClause = implode('AND',$conditions);
+
+        $sql = "UPDATE $table SET $setColumns WHERE $whereClause";
+        $statement = $this->conn->prepare($sql);
+        return $statement->execute(array_merge($data, $where));
+
     }
 
 }
